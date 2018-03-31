@@ -50,7 +50,13 @@ function movieThis(movieQuery){
 
     let request = require('request');
     request(url, function(error, response, body){
-        console.log(body);
+        let movie = JSON.parse(body);
+        // let message = `Title:\t${movie.Title}\n` +
+        //     `Year:\t${movie.Year}\n` +
+        //     `IMDB Rating:\t${movie.imdbRating}\n` +
+        //     `Rotten Tomatoes:\t${movie}`
+
+        console.log(message);
     })
 }
 
@@ -88,7 +94,7 @@ switch (command.toLowerCase()) {
             return;
         }
         let movieQuery = process.argv.slice(3).join(' ');
-        movieThis();
+        movieThis(movieQuery);
         break;
     default:
         break;

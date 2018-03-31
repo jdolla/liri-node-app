@@ -10,7 +10,8 @@
             "name": "Launch Program",
             "program": "${workspaceFolder}/liri.js",
             "args": [
-                "spotify-this-song"
+                "movie-this",
+                "The Matrix"
             ]
         }
     ]
