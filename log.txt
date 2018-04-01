@@ -1,0 +1,24 @@
+Command:
+do-what-it-says
+
+Output:Maybe this is what you're looking for...
+Track Title:	Backstreet Boys
+Artist Name:	I Want It That Way
+Album Name:	The Hits--Chapter One
+Preview:	https://p.scdn.co/mp3-preview/e72a05dc3f69c891e3390c3ceaa77fad02f6b5f6?cid=d5ca2416a8d84007851972aaf479cb90
+Command:
+spotify-this-song Eat It
+
+Output:Maybe this is what you're looking for...
+Track Title:	Rossemberg Maza
+Artist Name:	Eat It Too (Cake)
+Album Name:	Eat It Too (Cake)
+Preview:	https://p.scdn.co/mp3-preview/1327199ab92887ce63e61e65f0c65cd7f2730f8c?cid=d5ca2416a8d84007851972aaf479cb90
+Command:
+spotify-this-song Eat It weird al
+
+Output:Maybe this is what you're looking for...
+Track Title:	"Weird Al" Yankovic
+Artist Name:	Eat It
+Album Name:	The Essential "Weird Al" Yankovic
+Preview:	https://p.scdn.co/mp3-preview/5b9843b163d62ce67429da82faad2687edcb88b1?cid=d5ca2416a8d84007851972aaf479cb90

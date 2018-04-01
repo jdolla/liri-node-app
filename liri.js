@@ -1,9 +1,12 @@
 let keys = require('./keys.js');
 var moment = require('moment');
 
+let fs = require('fs');
+
 function logMessage(message) {
-    console.log(message);
-    //later, add file loggin
+    fs.appendFile("./log.txt", `Command:\n${process.argv.slice(2).join(' ')}\n\nOutput:${message}`, function(){
+        console.log(message);
+    });
 };
 
 function myTweets() {
@@ -73,17 +76,35 @@ function movieThis(movieQuery) {
             `Plot:\n${movie.Plot}\n\n` +
             `Cast:\n${movie.Actors}`
 
-        console.log(message);
+        logMessage(message);
     })
 }
 
+function doCommand() {
+
+    switch (command.toLowerCase()) {
+        case 'my-tweets':
+            myTweets();
+            break;
+        case 'spotify-this-song':
+            spotifyThisSong(parameter);
+            break;
+        case 'movie-this':
+            movieThis(parameter);
+            break;
+        default:
+            break;
+    }
+
+}
 
 /********************************************************************************
  *  Parse Args:  Get Command and additional params
  ********************************************************************************/
 let commands = ["my-tweets", "spotify-this-song", "movie-this", "do-what-it-says"];
 
-let command = "";
+var command = "";
+var parameter = "";
 if (process.argv.length >= 3 && commands.includes(process.argv[2].toLowerCase())) {
     command = process.argv[2].toLowerCase();
 } else {
@@ -92,27 +113,22 @@ if (process.argv.length >= 3 && commands.includes(process.argv[2].toLowerCase())
 }
 
 
-
-switch (command.toLowerCase()) {
-    case 'my-tweets':
-        myTweets();
-        break;
-    case 'spotify-this-song':
-        if (process.argv.length <= 3) {
-            logMessage('You must provide a search value.  For example:  Banditios - The Refreshments');
-            return;
+if (command === 'do-what-it-says') {
+    fs.readFile("./random.txt", "utf8", function (error, data) {
+        if (error) {
+            logMessage(error);
+            throw error;
         }
-        let songQuery = process.argv.slice(3).join(' ');
-        spotifyThisSong(songQuery);
-        break;
-    case 'movie-this':
-        if (process.argv.length <= 3) {
-            logMessage('You must provide a search value.  For example:  The Matrix');
-            return;
-        }
-        let movieQuery = process.argv.slice(3).join(' ');
-        movieThis(movieQuery);
-        break;
-    default:
-        break;
+        let random = data.split(',');
+        command = random[0].trim();
+        parameter = random[1].trim()
+        doCommand();
+    });
+} else {
+    if (command != 'my-tweets' && process.argv.length <= 3) {
+        logMessage(`The command ${command} requires an additional parameter.`);
+        return;
+    }
+    parameter = process.argv.slice(3).join(' ');
+    doCommand();
 }
