@@ -6,7 +6,7 @@ function logMessage(message) {
     //later, add file loggin
 };
 
-function myTweets(){
+function myTweets() {
     var Twitter = require('twitter');
     let client = new Twitter(keys.twitter);
     client.get('statuses/home_timeline', function (error, tweets, response) {
@@ -23,12 +23,12 @@ function spotifyThisSong(songQuery) {
     let Spotify = require('node-spotify-api');
     let spotify = new Spotify(keys.spotify);
 
-    spotify.search({ type: 'track,artist', query: songQuery, limit: 1 }, function(err, data) {
+    spotify.search({ type: 'track,artist', query: songQuery, limit: 1 }, function (err, data) {
         if (err) {
-          return logMessage('Error occurred: ' + err);
+            return logMessage('Error occurred: ' + err);
         }
-      
-        let track = data.tracks.items[0];      
+
+        let track = data.tracks.items[0];
         let artist = track.artists[0].name;
         let title = track.name;
         let preview = track.preview_url;
@@ -43,18 +43,35 @@ function spotifyThisSong(songQuery) {
     });
 }
 
-function movieThis(movieQuery){
+function movieThis(movieQuery) {
     let omdb = keys.omdb;
     movieQuery = encodeURIComponent(movieQuery);
     let url = `http://www.omdbapi.com/?apikey=${omdb.api_key}&t=${movieQuery}`
 
     let request = require('request');
-    request(url, function(error, response, body){
+    request(url, function (error, response, body) {
+
         let movie = JSON.parse(body);
-        // let message = `Title:\t${movie.Title}\n` +
-        //     `Year:\t${movie.Year}\n` +
-        //     `IMDB Rating:\t${movie.imdbRating}\n` +
-        //     `Rotten Tomatoes:\t${movie}`
+        let title = movie.Title;
+        let year = movie.Year;
+
+        let imdb = movie.Ratings.find(site => site.Source === 'Internet Movie Database');
+        imdb = (imdb) ? imdb.Value : 'n/a';
+
+        let rotten = movie.Ratings.find(site => site.Source === 'Rotten Tomatoes');
+        rotten = (rotten) ? rotten.Value : 'n/a';
+
+        let country = movie.Country;
+        let language = movie.Language;
+
+
+        let message = `\n${title} (${year})\n\n` +
+            `${language} (${country})\n` +
+            `Ratings:\n` +
+            `  Tomatoes: ${rotten}\n` +
+            `     IMDB: ${imdb}\n\n` +
+            `Plot:\n${movie.Plot}\n\n` +
+            `Cast:\n${movie.Actors}`
 
         console.log(message);
     })
@@ -81,7 +98,7 @@ switch (command.toLowerCase()) {
         myTweets();
         break;
     case 'spotify-this-song':
-        if(process.argv.length <= 3){
+        if (process.argv.length <= 3) {
             logMessage('You must provide a search value.  For example:  Banditios - The Refreshments');
             return;
         }
@@ -89,7 +106,7 @@ switch (command.toLowerCase()) {
         spotifyThisSong(songQuery);
         break;
     case 'movie-this':
-        if(process.argv.length <=3){
+        if (process.argv.length <= 3) {
             logMessage('You must provide a search value.  For example:  The Matrix');
             return;
         }
